@@ -2,7 +2,10 @@ import lt.techin.municipality.IllegalCitizenException;
 import lt.techin.municipality.Municipality;
 import lt.techin.municipality.Person;
 import lt.techin.municipality.PersonPredicate;
+import org.opentest4j.AssertionFailedError;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,10 +25,16 @@ public class NewMun implements Municipality {
         return persons.stream().map(a -> a.getFirstName().equals(name)).findAny().get();
 
     }
-    
+
 
     @Override
     public void registerCitizen(Person person) throws IllegalCitizenException {
+
+        LocalDate now = LocalDate.now();
+        
+        if (person.getFirstName() == null || person.getLastName() == null || person.getDateOfBirth() == null || person.getYearlyIncome() < 0 || !now.isAfter(person.getDateOfBirth())) {
+            throw new IllegalCitizenException(person);
+        }
 
         if (!persons.contains(person)) {
             persons.add(person);
@@ -74,6 +83,18 @@ public class NewMun implements Municipality {
     @Override
     public int countAdultCitizens() {
 
+        LocalDate now = LocalDate.now();
+//        Period period = Period.between()
+
+        LocalDate date18yearsAgo = LocalDate.now().minusYears(18);
+
+//        int count = persons.stream().mapToInt(a -> a.getDateOfBirth() <= date18yearsAgo).count();
+
+
+//        LocalDate date = persons.getDateOfBirth();
+//        LocalDate date18yearsAgo = LocalDate.now().minusYears(18);
+
+
 //        long age = new Date().getTime() - getBirthDate().getTime();
 
 //        Date age1 = new Date(age);
@@ -87,8 +108,18 @@ public class NewMun implements Municipality {
     @Override
     public double totalIncomeInTaxes() {
 
-//        If (getYearly)
-        return 0;
+        double sum = 0;
+
+        for (Person person : persons) {
+            if (person.getYearlyIncome() < 14000) {
+                continue;
+            } else if (person.getYearlyIncome() > 1000000) {
+                sum += person.getYearlyIncome() * 0.84;
+            }
+            sum += person.getYearlyIncome() * 0.85;
+        }
+
+        return sum;
     }
 
     @Override
