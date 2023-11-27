@@ -9,6 +9,9 @@ import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.filtering;
+import static java.util.stream.Collectors.groupingBy;
+
 public class NewMun implements Municipality {
 
     private ArrayList<Person> persons = new ArrayList<>();
@@ -31,7 +34,7 @@ public class NewMun implements Municipality {
     public void registerCitizen(Person person) throws IllegalCitizenException {
 
         LocalDate now = LocalDate.now();
-        
+
         if (person.getFirstName() == null || person.getLastName() == null || person.getDateOfBirth() == null || person.getYearlyIncome() < 0 || !now.isAfter(person.getDateOfBirth())) {
             throw new IllegalCitizenException(person);
         }
@@ -62,47 +65,31 @@ public class NewMun implements Municipality {
 
     }
 
-//    public static int calculateAge(LocalDate birthDate, Lo) {
-//
-//    }
-
     @Override
     public Person findOldestPerson() {
 
 
         Person oldestPerson = persons.stream().max(Comparator.comparing(Person::getDateOfBirth)).get();
-//        Person oldestPerson = persons.stream().map(Person::getDateOfBirth).max(Comparator.naturalOrder()).get();
-
-
-//        Person oldestPerson = persons.stream().filter(a -> a.g)
-//        return oldestPerson;
 
         return oldestPerson;
     }
+
+    public static int calc(LocalDate birthday, LocalDate currentDate) {
+        if ((birthday != null) && (currentDate != null)) {
+            return Period.between(birthday, currentDate).getYears();
+        }
+        return 0;
+    }
+
 
     @Override
     public int countAdultCitizens() {
 
         LocalDate now = LocalDate.now();
-//        Period period = Period.between()
 
-        LocalDate date18yearsAgo = LocalDate.now().minusYears(18);
+        int count = (int) persons.stream().filter(a -> calc(a.getDateOfBirth(), now) >= 18).count();
 
-//        int count = persons.stream().mapToInt(a -> a.getDateOfBirth() <= date18yearsAgo).count();
-
-
-//        LocalDate date = persons.getDateOfBirth();
-//        LocalDate date18yearsAgo = LocalDate.now().minusYears(18);
-
-
-//        long age = new Date().getTime() - getBirthDate().getTime();
-
-//        Date age1 = new Date(age);
-
-//        int adultCitizens =
-
-//        int adultCitizens = persons.stream().filter(a -> a.getDateOfBirth());
-        return 0;
+        return count;
     }
 
     @Override
@@ -137,8 +124,8 @@ public class NewMun implements Municipality {
     @Override
     public Map<Integer, List<Person>> groupByYearOfBirth() {
 
-//        Map<Integer,Person> groupPersonsByDate = persons.sort(a -> );
-//        return groupPersonsByDate;
+//        return persons.stream().collect(groupingBy(persons::Year));
         return null;
+
     }
 }
