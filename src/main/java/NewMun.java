@@ -4,6 +4,8 @@ import lt.techin.municipality.Person;
 import lt.techin.municipality.PersonPredicate;
 import org.opentest4j.AssertionFailedError;
 
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
@@ -27,6 +29,13 @@ public class NewMun implements Municipality {
 
         return persons.stream().map(a -> a.getFirstName().equals(name)).findAny().get();
 
+    }
+
+    public static int calc(LocalDate birthday, LocalDate currentDate) {
+        if ((birthday != null) && (currentDate != null)) {
+            return Period.between(birthday, currentDate).getYears();
+        }
+        return 0;
     }
 
 
@@ -68,19 +77,10 @@ public class NewMun implements Municipality {
     @Override
     public Person findOldestPerson() {
 
-
-        Person oldestPerson = persons.stream().max(Comparator.comparing(Person::getDateOfBirth)).get();
+        Person oldestPerson = persons.stream().min(Comparator.comparing(Person::getDateOfBirth)).get();
 
         return oldestPerson;
     }
-
-    public static int calc(LocalDate birthday, LocalDate currentDate) {
-        if ((birthday != null) && (currentDate != null)) {
-            return Period.between(birthday, currentDate).getYears();
-        }
-        return 0;
-    }
-
 
     @Override
     public int countAdultCitizens() {
@@ -124,7 +124,14 @@ public class NewMun implements Municipality {
     @Override
     public Map<Integer, List<Person>> groupByYearOfBirth() {
 
-//        return persons.stream().collect(groupingBy(persons::Year));
+//        SimpleDateFormat format = new SimpleDateFormat();
+//        Data date = format.parse();
+//        SimpleDateFormat echh = new SimpleDateFormat("yyyy");
+//        String year = echh.format(date);
+//
+//        return persons.stream().collect(groupingBy(persons::));
+//        Map<Integer, List<Person>> pp = persons.stream().collect(groupingBy(Person::getDateOfBirth));
+//        return pp;
         return null;
 
     }
